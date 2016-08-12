@@ -1,12 +1,9 @@
 var express = require('express');
 var app = express();
+var insertRouter = require('./routes/insert');
+var redirectRouter = require('./routes/redirect');
 
-app.get('/', function (req, res) {
-    //res.send("express server again");
-    res.json({
-        name: "fairyqiqi",
-        age: 18
-    });
-})
+app.use('/api/v1', insertRouter);
+app.use('/:shortUrl', redirectRouter);
 
 app.listen(7777);
