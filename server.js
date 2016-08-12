@@ -1,23 +1,12 @@
-var http = require('http');
-var fs = require('fs');
+var express = require('express');
+var app = express();
 
-http.createServer(function (req, res) {
-    console.log("server started");
+app.get('/', function (req, res) {
+    //res.send("express server again");
+    res.json({
+        name: "fairyqiqi",
+        age: 18
+    });
+})
 
-    if (req.url === '/') {
-        res.writeHead(200, {"Content-Type": "text-html"});
-        //res.write("hello there!")
-        var html = fs.readFileSync(__dirname + '/index.html');
-        res.end(html);
-    }
-
-    if (req.url === '/api') {
-        res.writeHead(200, {"Content-Type": "application/json"});
-        var obj = {
-            name: "fairyqiqi",
-            location: "Hong Kong"
-        }
-        res.end(JSON.stringify(obj));
-    }
-
-}).listen(7777);
+app.listen(7777);
