@@ -24,7 +24,15 @@ function ConvertTo62(size) {
     return recursiveFunc(size, "");
 }
 
-function getShortUrl(longUrl) {
+function enrichLongUrl(longUrl) {
+    if (longUrl.indexOf('http') === -1) {
+        longUrl = "http://" + longUrl;
+    }
+    return longUrl;
+}
+
+function getShortUrl(reqLongUrl) {
+    var longUrl = enrichLongUrl(reqLongUrl);
     if (longToShortMap.has(longUrl)) {
         shortUrl = longToShortMap.get(longUrl);
     } else {
@@ -38,12 +46,13 @@ function getShortUrl(longUrl) {
 function getLongUrl(shortUrl) {
     if (shortToLongMap.has(shortUrl)) {
         var longUrl = shortToLongMap.get(shortUrl);
-        //TODO: if longUrl doesn't start with "http://", add it.
         return longUrl;
     } else {
         return null;
     }
 }
 
-module.exports.getShortUrl = getShortUrl;
-module.exports.getLongUrl = getLongUrl;
+module.exports = {
+    getShortUrl: getShortUrl,
+    getLongUrl: getLongUrl
+};
