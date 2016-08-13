@@ -27,8 +27,7 @@ function recursiveFunc (x, result) {
 }
 
 function ConvertTo62(size) {
-    var size1 = 25500;
-    return recursiveFunc(size1, "");
+    return recursiveFunc(size, "");
 }
 function CreateShortUrl() {
     var shortUrl = ConvertTo62(longToShortMap.size);
@@ -51,3 +50,4 @@ router.post('/urls', jsonParser, function (req, res) {
 });
 
 module.exports = router;
+module.exports.shortToLongMap = shortToLongMap;
