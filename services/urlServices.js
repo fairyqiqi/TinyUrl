@@ -21,21 +21,14 @@ var encode = function () {
     return encodeArr;
 }();
 
-function recursiveFunc (x, result) {
-    var v = Math.floor(x/62);
-    var m = x % 62;
-    var tempResult = encode[m] + result;
-    if (v == 0) {
-        return tempResult;
-    } else if (v > 0 && v < 62){
-        return encode[v] + tempResult;
-    } else if (v >= 62) {
-        return recursiveFunc(v, tempResult);
-    }
-}
+function ConvertTo62(num) {
+    var result = '';
+    do {
+        result = encode[num % 62] + result;
+        num = Math.floor(num / 62);
+    } while (num > 0);
 
-function ConvertTo62(size) {
-    return recursiveFunc(size, "");
+    return result;
 }
 
 function ConvertToInt(shortUrl) {
@@ -60,6 +53,7 @@ function enrichLongUrl(longUrl) {
 
 function getShortUrl(reqLongUrl) {
     var longUrl = enrichLongUrl(reqLongUrl);
+    var shortUrl = "";
     if (longToShortMap.has(longUrl)) {
         var shortUrlInNumber = longToShortMap.get(longUrl);
         shortUrl = ConvertTo62(shortUrlInNumber);
