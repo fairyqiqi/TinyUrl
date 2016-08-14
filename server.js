@@ -1,5 +1,6 @@
 var express = require('express');
 var app = express();
+
 var insertRouter = require('./routes/insert');
 var redirectRouter = require('./routes/redirect');
 

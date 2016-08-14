@@ -1,11 +1,25 @@
 var longToShortMap = new Map();
 var shortToLongMap = new Map();
 
-var encode = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-    'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
-    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
-    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
+var genCharArray = function (charA, charZ) {
+    var arr = [];
+    var i = charA.charCodeAt(0);
+    var j = charZ.charCodeAt(0);
+
+    for (var k = i; k <= j; k++) {
+        arr.push(String.fromCharCode(k));
+    }
+
+    return arr;
+};
+
+var encode = function () {
+    var encodeArr = [];
+    encodeArr = encodeArr.concat(genCharArray('0', '9'));
+    encodeArr = encodeArr.concat(genCharArray('A', 'Z'));
+    encodeArr = encodeArr.concat(genCharArray('a', 'z'));
+    return encodeArr;
+}();
 
 function recursiveFunc (x, result) {
     var v = Math.floor(x/62);
@@ -24,6 +38,19 @@ function ConvertTo62(size) {
     return recursiveFunc(size, "");
 }
 
+function ConvertToInt(shortUrl) {
+    var length = shortUrl.length;
+    var shortUrlInNumber = 0;
+    for (var i = 0; i < length; i++) {
+        var encodingLength = encode.length;
+        var c = shortUrl.charAt(i);
+        var index = encode.indexOf(c);
+        shortUrlInNumber += index * Math.pow(encodingLength, length-i-1);
+    }
+    return shortUrlInNumber;
+}
+
+
 function enrichLongUrl(longUrl) {
     if (longUrl.indexOf('http') === -1) {
         longUrl = "http://" + longUrl;
@@ -34,19 +61,21 @@ function enrichLongUrl(longUrl) {
 function getShortUrl(reqLongUrl) {
     var longUrl = enrichLongUrl(reqLongUrl);
     if (longToShortMap.has(longUrl)) {
-        shortUrl = longToShortMap.get(longUrl);
+        var shortUrlInNumber = longToShortMap.get(longUrl);
+        shortUrl = ConvertTo62(shortUrlInNumber);
     } else {
-        shortUrl = ConvertTo62(longToShortMap.size);
-        longToShortMap.set(longUrl, shortUrl);
-        shortToLongMap.set(shortUrl, longUrl);
+        var size = longToShortMap.size;
+        shortUrl = ConvertTo62(size);
+        longToShortMap.set(longUrl, size);
+        shortToLongMap.set(size, longUrl);
     }
     return shortUrl;
 }
 
 function getLongUrl(shortUrl) {
-    if (shortToLongMap.has(shortUrl)) {
-        var longUrl = shortToLongMap.get(shortUrl);
-        return longUrl;
+    var shortUrlInNumber = ConvertToInt(shortUrl);
+    if (shortToLongMap.has(shortUrlInNumber)) {
+        return shortToLongMap.get(shortUrlInNumber);
     } else {
         return null;
     }

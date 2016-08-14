@@ -9,7 +9,10 @@ router.get('*', function (req, res) {
     if (longUrl != null) {
         res.redirect(longUrl);
     } else {
-
+        res.json({
+            "Error": "404",
+            "ErrorMsg": "Cannot find the corresponding long URL"
+        });
     }
 });
 

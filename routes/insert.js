@@ -11,7 +11,7 @@ router.post('/urls', jsonParser, function (req, res) {
     var shortUrl = urlService.getShortUrl(longUrl);
     res.json({
         "shortUrl": shortUrl,
-        "longUrl": longUrl //TODO: return enriched long url
+        "longUrl": longUrl
     });
 });
 
