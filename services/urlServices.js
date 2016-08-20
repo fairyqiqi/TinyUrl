@@ -45,6 +45,7 @@ function ConvertToInt(shortUrl) {
 
 
 function enrichLongUrl(longUrl) {
+    if (!longUrl) return longUrl;
     if (longUrl.indexOf('http') === -1) {
         longUrl = "http://" + longUrl;
     }

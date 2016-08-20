@@ -1,10 +1,13 @@
 var express = require('express');
 var app = express();
 
-var insertRouter = require('./routes/insert');
+var indexRouter = require('./routes/index');
+var restRouter = require('./routes/rest');
 var redirectRouter = require('./routes/redirect');
 
-app.use('/api/v1', insertRouter);
+app.use('/public', express.static(__dirname + "/public"));
+app.use('/', indexRouter);
+app.use('/api/v1', restRouter);
 app.use('/:shortUrl', redirectRouter);
 
 app.listen(7777);

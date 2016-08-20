@@ -11,7 +11,7 @@ router.get('*', function (req, res) {
     } else {
         res.json({
             "Error": "404",
-            "ErrorMsg": "Cannot find the corresponding long URL"
+            "ErrorMsg": "Cannot find the long URL for " + shortUrl
         });
     }
 });
