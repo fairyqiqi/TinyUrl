@@ -1,3 +1,5 @@
+var UrlModel = require('../models/urlModel');
+
 var longToShortMap = new Map();
 var shortToLongMap = new Map();
 
@@ -43,6 +45,31 @@ function ConvertToInt(shortUrl) {
     return shortUrlInNumber;
 }
 
+function getShortUrl(reqLongUrl, callback) {
+    var longUrl = enrichLongUrl(reqLongUrl);
+
+    UrlModel.findOne({ longUrl: longUrl }, function (err, url) {
+        //TODO: handle error
+        if (url) {
+            callback({
+                longUrl: longUrl,
+                shortUrl: ConvertTo62(url.shortUrlInNumber)
+            });
+        } else {
+            generateShortUrl(function (shortUrlInNumber) {
+                var url = new UrlModel({
+                    longUrl: longUrl,
+                    shortUrlInNumber: shortUrlInNumber
+                });
+                url.save();
+                callback({
+                    longUrl: longUrl,
+                    shortUrl: ConvertTo62(shortUrlInNumber)
+                });
+            });
+        }
+    });
+}
 
 function enrichLongUrl(longUrl) {
     if (!longUrl) return longUrl;
@@ -52,28 +79,26 @@ function enrichLongUrl(longUrl) {
     return longUrl;
 }
 
-function getShortUrl(reqLongUrl) {
-    var longUrl = enrichLongUrl(reqLongUrl);
-    var shortUrl = "";
-    if (longToShortMap.has(longUrl)) {
-        var shortUrlInNumber = longToShortMap.get(longUrl);
-        shortUrl = ConvertTo62(shortUrlInNumber);
-    } else {
-        var size = longToShortMap.size;
-        shortUrl = ConvertTo62(size);
-        longToShortMap.set(longUrl, size);
-        shortToLongMap.set(size, longUrl);
-    }
-    return shortUrl;
+function generateShortUrl(callback) {
+    UrlModel.find({}, function (err, urls) {
+        //TODO: handle error
+        callback(urls.length);
+    });
 }
 
-function getLongUrl(shortUrl) {
+function getLongUrl(shortUrl, callback) {
     var shortUrlInNumber = ConvertToInt(shortUrl);
-    if (shortToLongMap.has(shortUrlInNumber)) {
-        return shortToLongMap.get(shortUrlInNumber);
-    } else {
-        return null;
-    }
+    UrlModel.findOne({ shortUrlInNumber : shortUrlInNumber}, function (err, url) {
+        //TODO: handle error
+        if (url){
+            callback({
+                longUrl: url.longUrl,
+                shortUrl: shortUrl
+            });
+        } else {
+            callback(url)
+        }
+    });
 }
 
 module.exports = {

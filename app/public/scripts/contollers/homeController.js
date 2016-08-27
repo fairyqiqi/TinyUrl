@@ -5,8 +5,10 @@ app.controller("homeController", ["$scope", "$http", "$location", function ($sco
         $http.post("/api/v1/urls", {
                 longUrl: $scope.longUrl
             })
-            .success(function (response) {
-                $location.path("/urls/" + response.shortUrl); // "/urls" is based on http://xxxx:xxx/#/
+            .then(function (response) {
+                //Because it's angular, the address always starts with /#/,
+                //so now the address becomes, say, "http://xxxx:xxx/#/urls/2"
+                $location.path("/urls/" + response.data.shortUrl); //
             });
     }
 }]);

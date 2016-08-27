@@ -8,24 +8,20 @@ var urlService = require('../services/urlServices');
 
 router.post('/urls', jsonParser, function (req, res) {
     var longUrl = req.body.longUrl; //longUrl is defined in json body
-    var shortUrl = urlService.getShortUrl(longUrl);
-    res.json({
-        "shortUrl": shortUrl,
-        "longUrl": longUrl
+    urlService.getShortUrl(longUrl, function (url) {
+        res.json(url);
     });
 });
 
 router.get('/urls/:shortUrl', function (req, res) {
     var shortUrl = req.params.shortUrl;
-    var longUrl = urlService.getLongUrl(shortUrl);
-    if (longUrl) {
-        res.json({
-            "shortUrl": shortUrl,
-            "longUrl": longUrl
-        });
-    } else {
-        res.status(404).send("Cannot find the long URL for " + shortUrl)
-    }
+    urlService.getLongUrl(shortUrl, function (url) {
+        if (url){
+            res.json(url);
+        } else {
+            res.status(404).send("Cannot find the long URL for " + shortUrl)
+        }
+    });
 });
 
 module.exports = router;
