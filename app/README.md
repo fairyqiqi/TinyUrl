@@ -33,16 +33,16 @@
 # Docker How-To
 
 1. Using Vagrant to run Ubuntu, then run docker in Ubutntu
-* Add synced folder in [Vagrantfile](https://github.com/fairyqiqi/TinyUrl/blob/master/playgroud/Vagrantfile)
-  * ```config.vm.synced_folder "../app", "/root/tinyUrlSource"```
-    * "../app" - Source code path relative to where Vagrantfile is
-    * "/root/tinyUrlSource" - Source code path to sync in Ubuntu which will contain node_modules
-* Mark down the network address of the guest Ubuntu
-  * ```s1.vm.network :private_network, ip: "192.168.77.101"```
+  - Add synced folder in [Vagrantfile](https://github.com/fairyqiqi/TinyUrl/blob/master/playgroud/Vagrantfile)
+    * ```config.vm.synced_folder "../app", "/root/tinyUrlSource"```
+      * "../app" - Source code path relative to where Vagrantfile is
+      * "/root/tinyUrlSource" - Source code path to sync in Ubuntu which will contain node_modules
+  - Mark down the network address of the guest Ubuntu
+    * ```s1.vm.network :private_network, ip: "192.168.77.101"```
   
 2. Docker file
-* Dockerfile is written based on the guest Ubuntu's path.
-* See [Dockerfile](https://github.com/fairyqiqi/TinyUrl/blob/master/app/Dockerfile)
+  - Dockerfile is written based on the guest Ubuntu's path.
+  - See [Dockerfile](https://github.com/fairyqiqi/TinyUrl/blob/master/app/Dockerfile)
 
 3. Run Docker
   ```
@@ -56,8 +56,7 @@
   ```
 
 4. Test
-
-* In host machine, type this address in browser: 
+  - In host machine, type this address in browser: 
   ```http://192.168.77.101:7777```
 
 # Done
