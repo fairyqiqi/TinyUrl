@@ -29,31 +29,59 @@
 27. Once redirectRouter gets the long url, it directly goes to the long url website. 
 
 
-# Docker How-To
+# Docker in Vagrant How-To
 
-1. Using Vagrant to run Ubuntu, then run docker in Ubutntu
+## Vagrant
+
+Use Vagrant to run Ubuntu, then run docker in Ubutntu.
   - Add synced folder in [Vagrantfile](https://github.com/fairyqiqi/TinyUrl/blob/master/playgroud/Vagrantfile)
-    * ```config.vm.synced_folder "../app", "/root/tinyUrlSource"```
-      - "../app" - Source code path relative to where Vagrantfile is
-      - "/root/tinyUrlSource" - Source code path to sync in Ubuntu which will contain node_modules
+    * ```config.vm.synced_folder "../source", "/root/tinyUrlSource"```
+      - "../source" - Source code path relative to where Vagrantfile is
+      - "/root/tinyUrlSource" - Source code path to sync in Ubuntu
   - Mark down the network address of the guest Ubuntu
     * ```s1.vm.network :private_network, ip: "192.168.77.101"```
   
-2. Docker file
-  - Dockerfile is written based on the guest Ubuntu's path.
-  - See [Dockerfile](https://github.com/fairyqiqi/TinyUrl/blob/master/app/Dockerfile)
+## Without Nginx/Redis
 
-3. Run Docker
+1. app docker file
+  - Dockerfile is written based on the guest Ubuntu's path.
+  - See [App Dockerfile](https://github.com/fairyqiqi/TinyUrl/blob/master/source/app/Dockerfile)
+
+2. Run Docker
+  ```
+  $ cd playground
+  $ vagrant up s1
+  $ vagrant ssh s1
+  $ sudo su -
+  # cd /root/tinyUrlSource/app
+  # docker build -t qiqi-tinyUrl:latest .                  //--> qiqi-tinyurl is the image name, all lower case
+  # docker run --name tinyurl -p 7777:7777 -d qiqi-tinyurl //--> tinyurl is the container name
+  ```
+
+3. Test
+  - In host machine, type this address in browser: `http://192.168.77.101:7777`
+
+## With Nginx/Redis
+
+1. Docker compose
+  - Add [docker-compose.yml](https://github.com/fairyqiqi/TinyUrl/blob/master/source/docker-compose.yml)
+  - It contains build step for Nginx, apps, redis
+  
+2. Nginx docker
+  - Add nginx docker file: [Nginx Dockerfile](https://github.com/fairyqiqi/TinyUrl/blob/master/source/nginx/Dockerfile)
+    * to copy nginx config
+  - Add nginx config: [nginx.conf](https://github.com/fairyqiqi/TinyUrl/blob/master/source/nginx/nginx.conf)
+    * to config nginx workers, upstream app servers, and listenning port
+    
+3. Run docker
   ```
   $ cd playground
   $ vagrant up s1
   $ vagrant ssh s1
   $ sudo su -
   # cd /root/tinyUrlSource
-  # docker build -t qiqi-tinyUrl:latest .                  //--> qiqi-tinyurl is the image name, all lower case
-  # docker run --name tinyurl -p 7777:7777 -d qiqi-tinyurl //--> tinyurl is the container name
+  # docker-compose up --build
   ```
-
+  
 4. Test
-  - In host machine, type this address in browser: `http://192.168.77.101:7777`
-
+  - In host machine, type this address in browser: `http://192.168.77.101`
