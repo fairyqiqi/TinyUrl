@@ -28,15 +28,14 @@
 26. redirectRouter parses out the shortUrl and call urlService to get the long url
 27. Once redirectRouter gets the long url, it directly goes to the website of it. 
 
-# Done
 
 # Docker How-To
 
 1. Using Vagrant to run Ubuntu, then run docker in Ubutntu
   - Add synced folder in [Vagrantfile](https://github.com/fairyqiqi/TinyUrl/blob/master/playgroud/Vagrantfile)
     * ```config.vm.synced_folder "../app", "/root/tinyUrlSource"```
-      * "../app" - Source code path relative to where Vagrantfile is
-      * "/root/tinyUrlSource" - Source code path to sync in Ubuntu which will contain node_modules
+      - "../app" - Source code path relative to where Vagrantfile is
+      - "/root/tinyUrlSource" - Source code path to sync in Ubuntu which will contain node_modules
   - Mark down the network address of the guest Ubuntu
     * ```s1.vm.network :private_network, ip: "192.168.77.101"```
   
@@ -56,7 +55,5 @@
   ```
 
 4. Test
-  - In host machine, type this address in browser: 
-  ```http://192.168.77.101:7777```
+  - In host machine, type this address in browser: `http://192.168.77.101:7777`
 
-# Done
