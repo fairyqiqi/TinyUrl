@@ -1,8 +1,8 @@
 var UrlModel = require('../models/urlModel');
 
 var redis = require('redis');
-var host = process.env.REDIS_PROT_6379_TCP_ADDR || '127.0.0.1';
-var port = process.env.REDIS_PROT_6379_TCP_PORT || '6379';
+var host = process.env.REDIS_PORT_6379_TCP_ADDR || '127.0.0.1';
+var port = process.env.REDIS_PORT_6379_TCP_PORT || '6379';
 var redisClient = redis.createClient(port, host);
 
 var genCharArray = function (charA, charZ) {
