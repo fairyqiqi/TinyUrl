@@ -98,6 +98,7 @@ function enrichLongUrl(longUrl) {
 }
 
 function generateShortUrl(callback) {
+    //TODO: use count
     UrlModel.find({}, function (err, urls) {
         //TODO: handle error
         callback(urls.length);

@@ -18,8 +18,11 @@
   },
   "homepage": "https://github.com/fairyqiqi/TinyUrl#readme",
   "dependencies": {
+    "angular-chart.js": "^1.0.2",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
+    "express-useragent": "^0.2.4",
+    "geoip-lite": "^1.1.8",
     "mongoose": "^4.5.9",
     "redis": "^2.6.2"
   }
