@@ -4,7 +4,7 @@ var RequestModel = require('../models/requestModel');
 var logRequest = function (shortUrl, req) {
     var reqInfo = {};
     reqInfo.shortUrl = shortUrl;
-    reqInfo.referer = req.headers.referer || 'Unknown'; //wechat or facebook
+    reqInfo.referer = req.headers.referer || 'Unknown'; //where's the request originated
     reqInfo.platform = req.useragent.platform || 'Unknown'; //windows or mac os
     reqInfo.browser = req.useragent.browser || 'Unknown';
 
@@ -34,7 +34,31 @@ var getUrlInfo = function (shortUrl, topic, callback) {
     }
 
     var groupId = '';
-    groupId = '$' + topic;
+
+    if (topic === 'hour') {
+        groupId = {
+            year: {$year: "$timestamp"},
+            month: {$month: "$timestamp"},
+            day: {$dayOfMonth: "$timestamp"},
+            hour: {$hour: "$timestamp"},
+            minute: {$minute: "$timestamp"}
+        }
+    } else if (topic === 'day') {
+        groupId = {
+            year: {$year: "$timestamp"},
+            month: {$month: "$timestamp"},
+            day: {$dayOfMonth: "$timestamp"},
+            hour: {$hour: "$timestamp"}
+        }
+    } else if (topic === 'month') {
+        groupId = {
+            year: {$year: "$timestamp"},
+            month: {$month: "$timestamp"},
+            day: {$dayOfMonth: "$timestamp"}
+        }
+    } else {
+        groupId = '$' + topic;
+    }
 
     RequestModel.aggregate([
         {

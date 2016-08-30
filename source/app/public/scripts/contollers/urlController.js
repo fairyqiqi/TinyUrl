@@ -14,6 +14,34 @@ app.controller("urlController", ["$scope", "$http", "$routeParams", function ($s
             $scope.totalClicks = response.data;
         });
 
+    $scope.getClicksByTime = function (time) {
+        $scope.lineLabels = [];
+        $scope.lineData = [];
+        $scope.time = time;
+        $http.get("/api/v1/urls/" + $routeParams.shortUrl + "/" + time)
+            .then(function (response) {
+                response.data.forEach(function (info) {
+
+                    var legend = '';
+                    if (time === 'hour') {
+                        if (info._id.minute < 10) {
+                            info._id.minute = '0' + info._id.minute;
+                        }
+                        legend = info._id.hour + ":" + info._id.minute;
+                    } else if (time === 'day') {
+                        legend = info._id.hour + ":00";
+                    } else if (time === 'month') {
+                        legend = info._id.day + "/" + info._id.month;
+                    }
+
+                    $scope.lineLabels.push(legend);
+                    $scope.lineData.push(info.count);
+                });
+            });
+    };
+
+    $scope.getClicksByTime('day');
+    
     var renderChart = function (chart, topic) {
         $scope[chart + 'Labels'] = [];
         $scope[chart + 'Data'] = [];
@@ -27,4 +55,6 @@ app.controller("urlController", ["$scope", "$http", "$routeParams", function ($s
     };
     renderChart('pie', 'referer');
     renderChart('bar', 'country');
+    renderChart('doughnut', 'platform');
+    renderChart('base', 'browser');
 }]);
