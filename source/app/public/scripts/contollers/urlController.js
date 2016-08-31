@@ -40,7 +40,7 @@ app.controller("urlController", ["$scope", "$http", "$routeParams", function ($s
             });
     };
 
-    $scope.getClicksByTime('day');
+    $scope.getClicksByTime('hour');
     
     var renderChart = function (chart, topic) {
         $scope[chart + 'Labels'] = [];
